@@ -11,6 +11,8 @@ import os
 def rand_word() -> str:
     with open("palavras.txt", "r", encoding="utf-8") as f:
         bank = f.readlines()
+    if not bank:
+        raise ValueError("A lista de palavras está vazia.")
     return random.choice(bank).strip()
 
 class game():
@@ -84,6 +86,20 @@ class game():
 
 
     def verify_word(self, letter):
+        # Camada 1: Validação de entrada básica
+        if not isinstance(letter, str) or len(letter) != 1:
+            self.board_count += 1
+            print("\n" + '\033[31m' + " Entrada de letra inválida amiguinho" + '\033[0;0m')
+            input()
+            return
+
+        # Camada 2: Validação de caracteres permitidos (segurança contra injeção de caracteres especiais)
+        if not letter.isalpha():
+            self.board_count += 1
+            print("\n" + '\033[31m' + " Apenas letras são permitidas amiguinho" + '\033[0;0m')
+            input()
+            return
+
         self.rep_letter.append(letter)
         
         if letter in self.palavra:
