@@ -101,6 +101,7 @@ class game():
             print("\n" + '\033[31m' + " Não tem essa letra amiguinho" + '\033[0;0m')
             input()
 
+
     def prin_board(self):
         os.system("cls")
 

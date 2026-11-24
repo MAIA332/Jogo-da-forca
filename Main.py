@@ -9,6 +9,7 @@ while True:
         print("Esta letra já foi")
         os.system("pause")
         break
+        break
     g.verify_word(letra_test.lower())
 
     if(g.board_count == 6):
