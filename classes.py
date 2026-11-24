@@ -8,8 +8,8 @@ import os
 
 
 
-def rand_word():
-    with open("palavras.txt","r") as f:
+def rand_word() -> str:
+    with open("palavras.txt", "r", encoding="utf-8") as f:
         bank = f.readlines()
     return random.choice(bank).strip()
 
@@ -99,7 +99,7 @@ class game():
         else:
             self.board_count += 1
             print("\n" + '\033[31m' + " Não tem essa letra amiguinho" + '\033[0;0m')
-            os.system("pause")
+            input()
 
     def prin_board(self):
         os.system("cls")

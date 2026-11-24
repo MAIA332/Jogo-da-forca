@@ -6,10 +6,9 @@ while True:
     g.prin_board()
     letra_test = str(input("\n"+" Chute uma letra: "))
     if(letra_test in g.rep_letter):
-        print("Esta letra ja foi")
+        print("Esta letra já foi")
         os.system("pause")
         break
-
     g.verify_word(letra_test.lower())
 
     if(g.board_count == 6):
