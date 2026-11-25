@@ -29,7 +29,12 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 - Mensagens Descritivas: O jogo fornece mensagens claras para orientar o jogador durante o jogo.
 - Simplicidade e Clareza: O código é projetado para ser fácil de entender, adequado para aprendizado.
 - Design Moderno: Interface inspirada em ferramentas de monitoramento como Cloudecode e Glances, com tema escuro e elementos interativos.
+- Autenticação e Controle de Acesso: Módulo `auth.py` implementa cadastro de usuários, validação de sessões e permissões administrativas.
+- Testes Automatizados: Suporte a testes unitários com fixtures isoladas (`tmp_path`, `monkeypatch`) para validação de credenciais e sessões.
+- Gerenciamento de Salas: Classe `RoomManager` gerencia a criação e gestão de salas de chat.
+- Configuração Dinâmica: Carregamento e salvamento de usuários via `load_users` e `save_users` no `config.py`.
 
+**Atualização:** 2026-11-25
 ## Como Jogar
 
 1. Clone ou faça o download do repositório para sua máquina local.

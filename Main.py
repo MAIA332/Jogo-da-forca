@@ -61,7 +61,7 @@ while True:
             user_data = authenticate_user(username, password)
             
             if user_data:
-                print(f"Login bem-succeedido! Bem-vindo, {user_data['username']} ({user_data['role']}).")
+                print(f"Login bem-sucedido! Bem-vindo, {user_data['username']} ({user_data['role']}).")
                 chat_manager = ChatManager()
                 print("Conectando ao chat global...")
                 chat_manager.connect()

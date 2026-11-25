@@ -35,15 +35,21 @@ def load_users() -> dict:
         return {}
     try:
         with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            if not isinstance(data, dict):
+                return {}
+            return data
     except (json.JSONDecodeError, IOError):
         return {}
 
 def save_users(users: dict):
-    """Salva os usuários no arquivo JSON."""
+    """Salva os usuários no arquivo JSON com tratamento de exceções."""
     path = get_users_file_path()
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(users, f, indent=4, ensure_ascii=False)
+    try:
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(users, f, indent=4, ensure_ascii=False)
+    except (IOError, OSError) as e:
+        raise IOError(f"Erro ao salvar usuários: {e}")
 
 def hash_password(password: str) -> str:
     """Gera um hash simples da senha (para uso demonstrativo)."""

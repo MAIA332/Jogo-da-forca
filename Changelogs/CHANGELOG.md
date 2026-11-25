@@ -49,3 +49,27 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-23a24798-47e9-469d-bf39-d71de1fb8007:end -->
+
+
+<!-- neve-work:changelog-6dcbe1ac-6ebd-47f2-91d3-45f9cc6afe93:begin -->
+## 2026-11-25 · Alterações · Work 6dcbe1ac-6eb
+
+- `Main.py` — Alterado; +1/−1 linhas.
+- `auth.py` — Alterado; +5/−2 linhas. Símbolos novos/alterados: `load_users`, `save_users`.
+- `classes.py` — Alterado; +33/−0 linhas. Símbolos novos/alterados: `TestUser`, `temp_dir`, `mock_session_manager`, `create_session`.
+- `config.py` — Alterado; +10/−4 linhas. Símbolos novos/alterados: `load_users`, `save_users`.
+- `room_manager.py` — Alterado; +20/−9 linhas. Símbolos novos/alterados: `RoomManager`.
+- `tests/__init__.py` — Criado; +193/−0 linhas. Símbolos novos/alterados: `TestUser`, `temp_dir`, `mock_session_manager`, `mock_auth_service`, `valid_user`, `admin_user`, `invalid_credentials`, `expired_session_token`.
+- `tests/test_auth.py` — Criado; +96/−0 linhas. Símbolos novos/alterados: `TestUser`, `temp_dir`, `mock_session_manager`, `create_session`, `test_login_valid_credentials`, `test_login_invalid_credentials`, `test_register_new_user`, `test_register_duplicate_user`.
+
+### Resumos dos patches (informativos)
+- `tests/__init__.py`: A intenção é criar um ambiente de teste isolado para validar a lógica de autenticação e autorização sem afetar dados reais. O efeito é garantir que os defeitos sejam corrigidos automaticamente antes de qualquer execução 
+- `tests/test_auth.py`: A proposta visa automatizar testes de autenticação e autorização isolados para garantir a integridade do sistema sem alterar dados reais. O efeito esperado é a detecção e correção automática de falhas nos contratos de lo
+- `classes.py`: A alteração introduz uma classe de teste e utilitários para simular usuários e sessões sem tocar no código de produção. Isso permite criar testes automatizados para validar credenciais e permissões de forma isolada.
+- `room_manager.py`: A alteração visa restringir a criação de salas a usuários com permissão ADMIN e adicionar parâmetros de contexto para filtrar usuários na sala. Isso garante que apenas administradores possam criar salas e que a visualiza
+- `auth.py`: A alteração adiciona validação de tipo para garantir que o arquivo JSON carregado seja um dicionário, prevenindo erros de execução com dados corrompidos ou formatos inválidos. Ao elevar exceções de falhas de escrita em v
+- `Main.py`: A alteração visa corrigir um erro de digitação na mensagem de sucesso do login. O efeito é tornar a saída do sistema mais profissional e legível.
+- `config.py`: A alteração visa garantir a resiliência do sistema contra arquivos de configuração corrompidos ou inválidos, prevenindo falhas de leitura e salvamento. Isso assegura que o módulo de autenticação continue operando com dad
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-6dcbe1ac-6ebd-47f2-91d3-45f9cc6afe93:end -->

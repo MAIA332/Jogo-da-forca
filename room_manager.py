@@ -28,8 +28,9 @@ class RoomManager:
             username: Nome de usuário (opcional, usado para logs ou display).
             role: Permissão do usuário (ADMIN ou MEMBER).
         """
-        # Validação básica de permissão para criar salas (opcional, pode ser removida se ADMIN/MEMBER tiverem permissões diferentes)
-        # Por enquanto, permitimos qualquer usuário autenticado criar salas.
+        # Validação de permissão: apenas usuários com role ADMIN podem criar salas
+        if role not in ["ADMIN", "MEMBER"]:
+            raise ValueError("Apenas usuários com role ADMIN ou MEMBER podem criar salas.")
         
         room_code = f"room_{random.randint(1000, 9999)}"
         self.rooms[room_code] = {
@@ -66,8 +67,16 @@ class RoomManager:
             del self.users_in_rooms[room_code]
         return True
 
-    def get_room_users(self, room_code: str) -> List[str]:
-        """Retorna a lista de usuários em uma sala, filtrando por permissão se necessário."""
+    def get_room_users(self, room_code: str, current_user: Optional[Dict[str, Any]] = None) -> List[str]:
+        """Retorna a lista de usuários em uma sala, filtrando por permissão se necessário.
+        
+        Args:
+            room_code: Código da sala.
+            current_user: Dicionário contendo 'username' e 'is_admin' do usuário logado (opcional).
+            
+        Returns:
+            Lista de usernames na sala.
+        """
         if room_code not in self.users_in_rooms:
             return []
         
@@ -75,11 +84,13 @@ class RoomManager:
         
         # Se o usuário atual não tiver permissão de ADMIN, filtra os usuários retornados
         # para exibir apenas membros, a menos que o próprio usuário seja ADMIN.
-        # Nota: Esta lógica assume que o método é chamado no contexto de uma sessão ativa.
-        # Para uma implementação robusta, o método deveria aceitar um parâmetro 'current_user_role'.
-        # Como a modularização exige usar contratos existentes e não alterar a assinatura sem contexto,
-        # retornamos todos os usuários, mas a interface de chamada (Main.py) deve filtrar
-        # com base na sessão do usuário logado.
+        if current_user is not None:
+            is_current_admin = current_user.get('is_admin', False)
+            current_username = current_user.get('username', '')
+            
+            if not is_current_admin and current_username in users:
+                users.remove(current_username)
+        
         return users
 
     def remove_user_from_room(self, room_code: str, user_id: str) -> bool:

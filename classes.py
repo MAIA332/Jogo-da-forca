@@ -8,6 +8,39 @@ import os
 
 
 
+import random
+import os
+from typing import List, Dict, Optional, Set
+from classes import Game, User
+import tempfile
+import shutil
+from pathlib import Path
+from unittest.mock import patch, MagicMock
+from typing import Generator, Dict, Any, Optional
+import pytest
+import secrets
+import hashlib
+from auth import AuthService, SessionManager
+
+class TestUser:
+    def __init__(self, username: str, password: str, is_admin: bool = False, session_token: str = None):
+        self.username = username
+        self.password = password
+        self.is_admin = is_admin
+        self.session_token = session_token
+    
+    def __repr__(self):
+        return f"TestUser({self.username}, {self.is_admin})"
+
+def temp_dir(tmp_path: Path) -> Path:
+    return tmp_path
+
+def mock_session_manager(monkeypatch: pytest.MonkeyPatch) -> Generator:
+    yield monkeypatch
+
+def create_session(user: TestUser) -> str:
+    return secrets.token_urlsafe(32)
+
 def rand_word() -> str:
     """
     Retorna uma palavra aleatória do arquivo de palavras.

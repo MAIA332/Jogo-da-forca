@@ -14,7 +14,10 @@ def load_users() -> dict:
     """Carrega os usuários do arquivo JSON. Retorna um dicionário vazio se não existir."""
     try:
         with open(get_users_file_path(), "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            if not isinstance(data, dict):
+                return {}
+            return data
     except FileNotFoundError:
         return {}
     except json.JSONDecodeError:
@@ -29,7 +32,7 @@ def save_users(users: dict):
         with open(get_users_file_path(), "w", encoding="utf-8") as f:
             json.dump(users, f, indent=4, ensure_ascii=False)
     except IOError:
-        pass
+        raise
 
 def hash_password(password: str) -> str:
     """Hasha a senha usando SHA-256."""
