@@ -15,6 +15,12 @@ def rand_word() -> str:
         raise ValueError("A lista de palavras está vazia.")
     return random.choice(bank).strip()
 
+def init_chat_global():
+    """Inicializa o módulo de chat global, importando dependências necessárias."""
+    from chat_manager import ChatManager
+    from templates.chat import render_template
+    return ChatManager, render_template
+
 def create_room() -> str:
     import secrets
     room_code = "".join(secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(6))
@@ -135,6 +141,12 @@ class game():
         print(f"\nSala criada! Código: {self.room_code}")
         print("Compartilhe este código com seus amigos para que eles entrem.")
         return self.room_code
+        # Nova funcionalidade de chat global será implementada em arquivos separados (gerenciador.py, main.py)
+        # Utilizando WebSockets para comunicação em tempo real entre todos os usuários conectados.
+        # A lógica de broadcast e gerenciamento de conexões será encapsulada na classe GerenciadorConexoes.
+        # A interface HTML será criada em templates/chat.html para interação do usuário.
+        # Este método permanece como ponto de entrada para a criação de salas, mas a comunicação global
+        # será tratada através das novas rotas de WebSocket definidas no main.py.
 
     def join_room(self, room_code):
         """Verifica se o jogador pode entrar na sala especificada."""

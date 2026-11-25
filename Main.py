@@ -5,7 +5,7 @@ import re
 g = cl.game()
 while True:
     g.prin_board()
-    opcao = input("\nEscolha uma opção: 1. Criar Sala  2. Entrar em Sala  3. Chute uma letra: ").strip()
+    opcao = input("\nEscolha uma opção: 1. Criar Sala  2. Entrar em Sala  3. Chute uma letra: 4. Chat Global: ").strip()
     
     if opcao == '1':
         g.create_room()
@@ -18,6 +18,18 @@ while True:
         if not re.match(r'^[a-zA-Z]$', letra_test):
             print("Entrada inválida. Por favor, digite apenas uma letra.")
             continue
+    elif opcao == '4':
+        from chat_manager import ChatManager
+        chat_manager = ChatManager()
+        print("Conectando ao chat global...")
+        chat_manager.connect()
+        print("Chat global iniciado. Digite 'sair' para encerrar.")
+        while True:
+            msg = input("Você: ").strip()
+            if msg.lower() == 'sair':
+                chat_manager.disconnect()
+                break
+            chat_manager.send(msg)
     else:
         print("Opção inválida.")
         continue
