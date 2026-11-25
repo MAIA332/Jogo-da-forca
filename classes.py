@@ -22,18 +22,107 @@ import secrets
 import hashlib
 from auth import AuthService, SessionManager
 
+import threading
+import time
+from typing import Optional, Callable, Any
+
 class TestUser:
     def __init__(self, username: str, password: str, is_admin: bool = False, session_token: str = None):
         self.username = username
         self.password = password
         self.is_admin = is_admin
         self.session_token = session_token
-    
+        self._thread: Optional[threading.Thread] = None
+        self._thread_lock = threading.Lock()
+        self._task_queue: list = []
+        self._running = False
+
+    def start_thread(self, task: Callable, *args, **kwargs) -> threading.Thread:
+        """Inicia uma thread dedicada para este usuário para executar a tarefa."""
+        with self._thread_lock:
+            if self._thread and self._thread.is_alive():
+                return self._thread
+            
+            self._running = True
+            self._thread = threading.Thread(target=task, args=args, kwargs=kwargs, name=f"Thread-{self.username}")
+            self._thread.daemon = True
+            self._thread.start()
+            return self._thread
+
+    def stop_thread(self):
+        """Para a thread dedicada do usuário."""
+        with self._thread_lock:
+            if self._thread and self._thread.is_alive():
+                self._running = False
+                self._thread.join(timeout=2.0)
+                self._thread = None
+
     def __repr__(self):
         return f"TestUser({self.username}, {self.is_admin})"
 
+import threading
+from pathlib import Path
+from typing import Optional
+
+class TempDirManager:
+    _instance: Optional['TempDirManager'] = None
+    _lock = threading.Lock()
+    _threads: dict[str, threading.Thread] = {}
+    _temp_dirs: dict[str, Path] = {}
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+                    cls._instance._initialized = False
+        return cls._instance
+
+    def __init__(self):
+        if self._initialized:
+            return
+        self._initialized = True
+        self._lock = threading.Lock()
+
+    def get_thread(self, user_id: str) -> threading.Thread:
+        with self._lock:
+            if user_id not in self._threads:
+                thread = threading.Thread(target=self._worker, args=(user_id,))
+                thread.daemon = True
+                thread.start()
+                self._threads[user_id] = thread
+            return self._threads[user_id]
+
+    def _worker(self, user_id: str):
+        # Lógica de trabalho isolado por thread
+        pass
+
+    def get_temp_dir(self, tmp_path: Path) -> Path:
+        with self._lock:
+            if user_id := getattr(self, '_current_user', None):
+                if user_id not in self._temp_dirs:
+                    safe_name = f"{user_id}_{tmp_path.name}"
+                    self._temp_dirs[user_id] = tmp_path.parent / safe_name
+                return self._temp_dirs[user_id]
+            return tmp_path
+
+    def cleanup(self, user_id: str):
+        with self._lock:
+            if user_id in self._threads:
+                self._threads[user_id].join(timeout=1.0)
+                del self._threads[user_id]
+            if user_id in self._temp_dirs:
+                try:
+                    self._temp_dirs[user_id].rmdir()
+                except FileNotFoundError:
+                    pass
+                del self._temp_dirs[user_id]
+
+# Singleton instance
+_temp_dir_manager = TempDirManager()
+
 def temp_dir(tmp_path: Path) -> Path:
-    return tmp_path
+    return _temp_dir_manager.get_temp_dir(tmp_path)
 
 def mock_session_manager(monkeypatch: pytest.MonkeyPatch) -> Generator:
     yield monkeypatch

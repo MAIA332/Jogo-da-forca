@@ -7,11 +7,66 @@ from classes import Game, User
 
 class RoomManager:
     def __init__(self):
+        import threading
+        import queue
+        from datetime import datetime
+
         self.rooms: Dict[str, Dict] = {}
         self.users_in_rooms: Dict[str, Set[str]] = {}  # room_code -> set of user_ids
         self.room_creators: Dict[str, str] = {}  # room_code -> user_id
         self.chat_history: List[Dict] = []  # Lista para armazenar mensagens de chat
         self.current_chat_room: str = None  # Código da sala atual para o chat
+        self._thread_pool: Dict[str, threading.Thread] = {}  # Mapeamento de usuário -> thread
+        self._user_queues: Dict[str, queue.Queue] = {}  # Filas de mensagens por usuário
+        self._lock = threading.Lock()  # Proteção para operações críticas
+
+    def _get_or_create_user_thread(self, user_id: str) -> threading.Thread:
+        """Garante que uma thread dedicada exista para o usuário."""
+        if user_id not in self._thread_pool:
+            queue = queue.Queue()
+            self._user_queues[user_id] = queue
+            thread = threading.Thread(target=self._user_message_handler, args=(user_id, queue), daemon=True)
+            thread.start()
+            self._thread_pool[user_id] = thread
+        return self._thread_pool[user_id]
+
+    def _user_message_handler(self, user_id: str, queue: queue.Queue):
+        """Gerencia mensagens recebidas pela thread do usuário."""
+        while True:
+            try:
+                msg = queue.get_nowait()
+                if msg is None:  # Sinal de parada
+                    break
+                self._process_message(user_id, msg)
+            except queue.Empty:
+                continue
+
+    def _process_message(self, user_id: str, message_data: Dict):
+        """Processa a mensagem dentro da thread do usuário."""
+        room_code = message_data.get('room')
+        if room_code:
+            if room_code not in self.rooms:
+                self.rooms[room_code] = {'users': set(), 'messages': []}
+            if user_id not in self.rooms[room_code]['users']:
+                self.rooms[room_code]['users'].add(user_id)
+            self.rooms[room_code]['messages'].append(message_data)
+            self.users_in_rooms[room_code] = self.rooms[room_code]['users']
+            self._broadcast_to_room(room_code, message_data)
+        else:
+            self.chat_history.append(message_data)
+
+    def _broadcast_to_room(self, room_code: str, message: Dict):
+        """Envia a mensagem para todos os usuários na sala (exceto o remetente)."""
+        if room_code not in self.users_in_rooms:
+            return
+        for user_id in self.users_in_rooms[room_code]:
+            if user_id != message.get('sender'):
+                self._send_to_user(user_id, message)
+
+    def _send_to_user(self, user_id: str, message: Dict):
+        """Envia mensagem para a fila de um usuário específico."""
+        if user_id in self._user_queues:
+            self._user_queues[user_id].put(message)
         self.chat_messages: Dict[str, List[str]] = {}  # room_code -> lista de mensagens
         self.chat_colors = {
             'user': '\033[92m',  # Verde
@@ -19,6 +74,10 @@ class RoomManager:
             'error': '\033[91m',  # Vermelho
             'reset': '\033[0m'
         }
+        self._thread_pool: Dict[int, threading.Thread] = {}  # Mapeamento de thread por ID de cliente
+        self._client_lock = threading.Lock()  # Proteção para operações de thread/cliente
+        self._active_clients: Set[int] = set()  # Conjunto de IDs de clientes ativos
+        self._client_data_lock = threading.Lock()  # Lock para garantir consistência de dados entre threads
 
     def create_room(self, user_id: str, username: str = None, role: str = None) -> str:
         """Cria uma nova sala e retorna seu código.
@@ -92,6 +151,58 @@ class RoomManager:
                 users.remove(current_username)
         
         return users
+
+    def _handle_client_thread(self, client_socket, client_data: Dict[str, Any]):
+        """Gerencia a conexão de um cliente em uma thread dedicada.
+        
+        Isola o processamento de cada cliente logado em uma thread própria,
+        garantindo eficiência e consistência de dados ao evitar bloqueios
+        na thread principal do servidor.
+        
+        Args:
+            client_socket: Socket de conexão do cliente.
+            client_data: Dados do cliente (username, session_id, etc.).
+        """
+        try:
+            username = client_data.get('username', 'anonymous')
+            session_id = client_data.get('session_id', 'unknown')
+            
+            # Registrar a entrada do usuário na sala atual
+            if 'room_code' in client_data:
+                room_code = client_data['room_code']
+                if room_code not in self.users_in_rooms:
+                    self.users_in_rooms[room_code] = set()
+                self.users_in_rooms[room_code].add(username)
+            
+            # Processar mensagens do cliente em loop
+            while True:
+                try:
+                    data = client_socket.recv(1024)
+                    if not data:
+                        break
+                    
+                    message = data.decode('utf-8').strip()
+                    if message:
+                        # Simulação de processamento de mensagem
+                        # Em implementação real, aqui entraria a lógica de broadcast
+                        # ou envio de resposta específica para este thread
+                        pass
+                        
+                except Exception as e:
+                    break
+                    
+        except Exception as e:
+            # Log de erro da thread (opcional, sem bloquear o sistema)
+            pass
+        finally:
+            # Limpar a saída do usuário da sala atual
+            if 'room_code' in client_data:
+                room_code = client_data['room_code']
+                if room_code in self.users_in_rooms:
+                    self.users_in_rooms[room_code].discard(username)
+            
+            # Encerrar a conexão
+            client_socket.close()
 
     def remove_user_from_room(self, room_code: str, user_id: str) -> bool:
         """

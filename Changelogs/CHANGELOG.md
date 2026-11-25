@@ -73,3 +73,23 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-6dcbe1ac-6ebd-47f2-91d3-45f9cc6afe93:end -->
+
+
+<!-- neve-work:changelog-63c25336-bf81-412f-99ae-8b0eb0bfedc6:begin -->
+## 2026-11-25 · Alterações · Work 63c25336-bf8
+
+- `Dockerfile` — Alterado; +1/−1 linhas.
+- `Main.py` — Alterado; +44/−0 linhas. Símbolos novos/alterados: `handle_client_thread`.
+- `classes.py` — Alterado; +91/−2 linhas. Símbolos novos/alterados: `TestUser`, `TempDirManager`, `temp_dir`.
+- `config.py` — Alterado; +2/−2 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`.
+- `room_manager.py` — Alterado; +111/−0 linhas. Símbolos novos/alterados: `RoomManager`.
+
+### Resumos dos patches (informativos)
+- `config.py`: A intenção é atualizar os comentários para refletir a nova arquitetura de isolamento por thread, sem alterar a lógica de criação de diretórios. O efeito é apenas uma melhoria na documentação, mantendo o comportamento atu
+- `classes.py`: A alteração implementa um padrão de thread por cliente para garantir isolamento e consistência de dados em operações concorrentes. O efeito é a criação de threads dedicadas por usuário com gerenciamento centralizado de r
+- `room_manager.py`: A alteração introduz threads dedicadas por usuário para processar mensagens em paralelo, visando aumentar a eficiência do sistema. Isso garante a integridade dos dados através de bloqueios e filas, mas pode causar incons
+- `Main.py`: A alteração propõe criar uma thread dedicada para cada usuário logado, isolando o processamento de eventos e garantindo a consistência dos dados. Isso aumenta a eficiência do sistema ao permitir que múltiplos clientes op
+- `Dockerfile`: A alteração remove um espaço em branco desnecessário e substitui o ENTRYPOINT pelo CMD para definir o comando de execução padrão. Isso garante que o container execute o módulo Main corretamente ao ser iniciado.
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-63c25336-bf81-412f-99ae-8b0eb0bfedc6:end -->

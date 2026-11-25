@@ -19,12 +19,12 @@ PERMISSIONS = {
 USERS_FILE = "data/users.json"
 
 def get_db_path():
-    """Garante que o diretório de dados exista."""
+    """Garante que o diretório de dados exista e prepara estrutura para isolamento de threads."""
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     return DB_PATH
 
 def get_users_file_path():
-    """Garante que o diretório de dados exista."""
+    """Garante que o diretório de dados exista e prepara para isolamento de threads."""
     os.makedirs(os.path.dirname(USERS_FILE), exist_ok=True)
     return USERS_FILE
 

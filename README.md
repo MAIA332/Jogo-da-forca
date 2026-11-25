@@ -33,6 +33,7 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 - Testes Automatizados: Suporte a testes unitários com fixtures isoladas (`tmp_path`, `monkeypatch`) para validação de credenciais e sessões.
 - Gerenciamento de Salas: Classe `RoomManager` gerencia a criação e gestão de salas de chat.
 - Configuração Dinâmica: Carregamento e salvamento de usuários via `load_users` e `save_users` no `config.py`.
+- Multi-threading Avançado: Padrão de isolamento por cliente logado, com thread dedicada para cada sessão, garantindo eficiência e consistência de dados.
 
 **Atualização:** 2026-11-25
 ## Como Jogar

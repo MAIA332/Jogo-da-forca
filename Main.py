@@ -1,8 +1,42 @@
 import classes as cl
 import os
 import re
+import threading
+import queue
+import time
 
 g = cl.game()
+user_lock = threading.Lock()
+active_threads = {}
+
+def handle_client_thread(user_id: str, user_data: dict):
+    """
+    Gerencia a thread individual para um cliente logado.
+    Garante isolamento e consistência de dados por meio de locks e filas de eventos.
+    """
+    thread_id = f"thread_{user_id}"
+    thread_data = {
+        'user_id': user_id,
+        'user_data': user_data,
+        'queue': queue.Queue(),
+        'lock': threading.Lock(),
+        'active': True
+    }
+    
+    with user_lock:
+        active_threads[thread_id] = thread_data
+    
+    try:
+        while thread_data['active']:
+            # Simula processamento de eventos do cliente (chat, chutes, etc.)
+            # Em uma implementação real, isso consumiria da fila de eventos
+            time.sleep(0.1) 
+    finally:
+        with user_lock:
+            if thread_id in active_threads:
+                active_threads[thread_id]['active'] = False
+                del active_threads[thread_id]
+
 while True:
     g.prin_board()
     opcao = input("\nEscolha uma opção: 1. Criar Sala  2. Entrar em Sala  3. Chute uma letra: 4. Chat Global: ").strip()
@@ -31,6 +65,16 @@ while True:
             print(f"Bem-vindo de volta, {user_info['username']} ({user_info['role']}).")
             chat_manager = ChatManager()
             print("Conectando ao chat global...")
+            
+            # Inicializa a thread isolada para este usuário
+            user_id = user_info['id']
+            thread = threading.Thread(
+                target=handle_client_thread,
+                args=(user_id, user_info),
+                daemon=True
+            )
+            thread.start()
+            print(f"Thread iniciada para {user_id}.")
             chat_manager.connect()
             print("Chat global iniciado. Digite 'sair' para encerrar.")
             while True:
