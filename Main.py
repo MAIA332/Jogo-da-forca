@@ -27,10 +27,14 @@ def handle_client_thread(user_id: str, user_data: dict):
         active_threads[thread_id] = thread_data
     
     try:
-        while thread_data['active']:
-            # Simula processamento de eventos do cliente (chat, chutes, etc.)
-            # Em uma implementação real, isso consumiria da fila de eventos
-            time.sleep(0.1) 
+        # Exibe splash screen de 2 segundos com a mensagem de boas-vindas
+        user_name = user_data.get('name', 'Usuário')
+        splash = SplashScreen(user_name)
+        splash.show()
+        
+        # Simula processamento de eventos do cliente (chat, chutes, etc.)
+        # Em uma implementação real, isso consumiria da fila de eventos
+        time.sleep(0.1) 
     finally:
         with user_lock:
             if thread_id in active_threads:

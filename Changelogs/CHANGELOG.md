@@ -93,3 +93,17 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-63c25336-bf81-412f-99ae-8b0eb0bfedc6:end -->
+
+
+<!-- neve-work:changelog-ae6fa984-06d3-4150-9ce4-3bb9f47d6d43:begin -->
+## 2026-11-25 · Alterações · Work ae6fa984-06d
+
+- `Main.py` — Alterado; +8/−4 linhas. Símbolos novos/alterados: `handle_client_thread`.
+- `splash.py` — Criado; +18/−0 linhas. Símbolos novos/alterados: `SplashScreen`.
+
+### Resumos dos patches (informativos)
+- `splash.py`: A alteração cria uma classe dedicada para exibir uma mensagem de boas-vindas personalizada com um atraso controlado. Isso centraliza a lógica da splash screen, evitando duplicação e facilitando futuras integrações com o 
+- `Main.py`: A alteração introduz um módulo SplashScreen para exibir uma mensagem de boas-vindas personalizada durante 2 segundos ao iniciar a sessão. Isso garante que o usuário receba uma mensagem contextualizada antes que o sistema
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-ae6fa984-06d3-4150-9ce4-3bb9f47d6d43:end -->
