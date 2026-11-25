@@ -15,6 +15,17 @@ def rand_word() -> str:
         raise ValueError("A lista de palavras está vazia.")
     return random.choice(bank).strip()
 
+def create_room() -> str:
+    import secrets
+    room_code = "".join(secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(6))
+    return room_code
+
+def join_room(room_code: str) -> bool:
+    # Implementação básica para validação futura
+    if len(room_code) != 6:
+        return False
+    return True
+
 class game():
         # Board (tabuleiro)
     board = ['''
@@ -116,6 +127,30 @@ class game():
             self.board_count += 1
             print("\n" + '\033[31m' + " Não tem essa letra amiguinho" + '\033[0;0m')
             input()
+
+    def create_room(self):
+        """Cria uma nova sala com um código único."""
+        import random
+        self.room_code = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=6))
+        print(f"\nSala criada! Código: {self.room_code}")
+        print("Compartilhe este código com seus amigos para que eles entrem.")
+        return self.room_code
+
+    def join_room(self, room_code):
+        """Verifica se o jogador pode entrar na sala especificada."""
+        if room_code == self.room_code:
+            print("\nBem-vindo à sala! Você pode começar a jogar.")
+            return True
+        else:
+            print("\nCódigo de sala inválido. Tente novamente.")
+            return False
+
+    def share_room_code(self):
+        """Exibe o código da sala atual para compartilhamento."""
+        if hasattr(self, 'room_code') and self.room_code:
+            print(f"\nSeu código de sala é: {self.room_code}")
+        else:
+            print("\nVocê ainda não criou uma sala.")
 
 
     def prin_board(self):
