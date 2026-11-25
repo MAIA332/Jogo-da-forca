@@ -14,6 +14,8 @@ Computador
 Televisao
 Violino
 Mochila
+ADMIN
+MEMBER
 Cachorro
 Rinoceronte
 Gato

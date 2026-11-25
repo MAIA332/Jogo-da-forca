@@ -1,14 +1,19 @@
 # Jogo da Forca em Python
-
 <!-- neve-readme-current -->
 
 **Atualizado em 2026-11-25.**
 
 - `Dockerfile` — Criado; +27/−0 linhas.
 - `docker-compose.yml` — Criado; +19/−0 linhas.
+- `Main.py` — Alterado; +62/−20 linhas.
+- `auth.py` — Criado; +97/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `classes.py` — Alterado; +11/−1 linhas. Símbolos novos/alterados: `join_room`.
+- `config.py` — Criado; +113/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `database.py` — Criado; +64/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `palavras.txt` — Alterado; +2/−0 linhas.
+- `room_manager.py` — Alterado; +25/−4 linhas. Símbolos novos/alterados: `RoomManager`.
 
 <!-- neve-readme-current -->
-
 
 Bem-vindo ao repositório do Jogo da Forca em Python! Este projeto é uma implementação do clássico jogo da forca, uma oportunidade para aprimorar suas habilidades de programação e entretenimento. O jogo utiliza um arquivo externo `palavras.txt` para armazenar as palavras a serem adivinhadas.
 

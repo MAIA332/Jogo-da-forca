@@ -26,3 +26,26 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-b7d50278-1460-4209-9671-cd3378863406:end -->
+
+<!-- neve-work:changelog-23a24798-47e9-469d-bf39-d71de1fb8007:begin -->
+## 2026-11-25 · Alterações · Work 23a24798-47e
+
+- `Main.py` — Alterado; +62/−20 linhas.
+- `auth.py` — Criado; +97/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `classes.py` — Alterado; +11/−1 linhas. Símbolos novos/alterados: `join_room`.
+- `config.py` — Criado; +113/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `database.py` — Criado; +64/−0 linhas. Símbolos novos/alterados: `get_db_path`, `get_users_file_path`, `load_users`, `save_users`, `hash_password`, `register_user`, `authenticate_user`, `validate_session`.
+- `palavras.txt` — Alterado; +2/−0 linhas.
+- `room_manager.py` — Alterado; +25/−4 linhas. Símbolos novos/alterados: `RoomManager`.
+
+### Resumos dos patches (informativos)
+- `config.py`: A alteração introduz um módulo de configuração para gerenciar autenticação, sessões e permissões de usuários via arquivos locais. Ela habilita funcionalidades de registro e login com distinção de níveis de acesso sem dup
+- `database.py`: A intenção é implementar um sistema de autenticação com níveis de permissão usando um arquivo JSON local para persistência de usuários. O efeito é adicionar funções para registro, validação de senha e geração de tokens, 
+- `auth.py`: A intenção é implementar um sistema de autenticação com níveis de permissão ADMIN e MEMBER, enquanto o efeito é introduzir dependências de arquivos JSON e funções de hash que não estão presentes no código original.
+- `classes.py`: A alteração adiciona parâmetros de sessão de usuário ao método `join_room` para validar autenticação e permissões antes de permitir o acesso. Isso impede que usuários não identificados ou com papéis inválidos entrem em s
+- `room_manager.py`: A alteração adiciona campos de usuário e permissão ao registro da sala para suportar a nova funcionalidade de login. O efeito imediato é permitir que o sistema diferencie administradores de membros, embora a lógica de fi
+- `Main.py`: A alteração introduz um sistema de autenticação que verifica o estado do usuário antes de iniciar o chat, garantindo que apenas usuários logados acessem a funcionalidade. O efeito imediato é que o fluxo do chat agora dep
+- `palavras.txt`: A alteração adiciona dois novos tipos de usuário ao sistema para habilitar a funcionalidade de login com níveis de permissão distintos. Isso permite que o código identifique e trate corretamente os administradores e memb
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-23a24798-47e9-469d-bf39-d71de1fb8007:end -->

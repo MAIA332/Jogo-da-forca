@@ -38,10 +38,20 @@ def create_room() -> str:
     room_code = "".join(secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(6))
     return room_code
 
-def join_room(room_code: str) -> bool:
+def join_room(room_code: str, user_session: dict = None) -> bool:
     # Implementação básica para validação futura
     if len(room_code) != 6:
         return False
+    
+    # Verificação de autenticação e permissões
+    if user_session is None or not user_session.get('authenticated'):
+        return False
+    
+    # ADMIN e MEMBER podem entrar em salas, mas ADMIN tem privilégios extras
+    role = user_session.get('role', 'MEMBER')
+    if role not in ['ADMIN', 'MEMBER']:
+        return False
+        
     return True
 
 class game():
