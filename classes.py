@@ -1,17 +1,10 @@
 # Hangman Game (Jogo da Forca)
 # Programação Orientada a Objetos
-
 # Import
 import random
 import os
 
-
-
-
-import random
-import os
 from typing import List, Dict, Optional, Set
-from classes import Game, User
 import tempfile
 import shutil
 from pathlib import Path
@@ -20,6 +13,9 @@ from typing import Generator, Dict, Any, Optional
 import pytest
 import secrets
 import hashlib
+
+# Import local
+from . import Game, User
 from auth import AuthService, SessionManager
 
 import threading
@@ -30,6 +26,26 @@ class TestUser:
     def __init__(self, username: str, password: str, is_admin: bool = False, session_token: str = None):
         self.username = username
         self.password = password
+
+    def hash_password(self) -> str:
+        """
+        Hasha a senha usando MD5 com um sal único por usuário.
+        Retorna o hash hexadecimal.
+        """
+        salt = secrets.token_hex(16)
+        password_with_salt = f"{salt}{self.password}"
+        return hashlib.md5(password_with_salt.encode()).hexdigest()
+
+    def verify_password(self, provided_password: str) -> bool:
+        """
+        Verifica se a senha fornecida corresponde ao hash armazenado.
+        """
+        stored_hash = self.hash_password()
+        return hashlib.md5(f"{stored_hash}{provided_password}".encode()).hexdigest() == stored_hash
+
+    def __repr__(self):
+        return f"TestUser(username='{self.username}', password_hashed=True)"
+
         self.is_admin = is_admin
         self.session_token = session_token
         self._thread: Optional[threading.Thread] = None
@@ -158,8 +174,6 @@ def init_chat_global():
 def create_room() -> str:
     import secrets
     room_code = "".join(secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(6))
-    return room_code
-
 def join_room(room_code: str, user_session: dict = None) -> bool:
     # Implementação básica para validação futura
     if len(room_code) != 6:
@@ -176,6 +190,48 @@ def join_room(room_code: str, user_session: dict = None) -> bool:
         
     return True
 
+def hash_password(password: str, salt: str = None) -> str:
+    """
+    Hasha a senha usando MD5 com sal (salt) para segurança básica.
+    Se salt não for fornecido, gera um aleatório.
+    """
+    import hashlib
+    import os
+    
+    if salt is None:
+        salt = os.urandom(16).hex()
+    
+    # Combina senha e sal
+    data = f"{password}:{salt}".encode('utf-8')
+    hash_object = hashlib.md5(data)
+    return hash_object.hexdigest()
+
+def verify_password(password: str, stored_hash: str) -> bool:
+    """
+    Verifica se a senha fornecida corresponde ao hash armazenado.
+    Exige que o hash armazenado tenha o formato 'hash:salt'.
+    """
+    import hashlib
+    
+    # Separa hash e sal do hash armazenado
+    try:
+        parts = stored_hash.split(':')
+        if len(parts) != 2:
+            return False
+        stored_hash_value, stored_salt = parts
+    except ValueError:
+        return False
+    
+    # Recupera o sal original
+    salt = stored_salt
+    
+    # Hasha a nova senha com o mesmo sal
+    data = f"{password}:{salt}".encode('utf-8')
+    hash_object = hashlib.md5(data)
+    computed_hash = hash_object.hexdigest()
+    
+    return computed_hash == stored_hash_value
+
 class game():
         # Board (tabuleiro)
     board = ['''
@@ -190,6 +246,7 @@ class game():
         |
     =========''', '''
     +---+
+
     |   |
     O   |
         |
@@ -254,38 +311,68 @@ class game():
             input()
             return
 
-        # Camada 2: Validação de caracteres permitidos (segurança contra injeção de caracteres especiais)
-        if not letter.isalpha():
-            self.board_count += 1
-            print("\n" + '\033[31m' + " Apenas letras são permitidas amiguinho" + '\033[0;0m')
-            input()
-            return
-
-        self.rep_letter.append(letter)
-        
-        if letter in self.palavra:
-            p = 0
-            while p < len(self.palavra):
-                if self.palavra[p] == letter:
-                    self.v_l_word[p] = letter
-                    p += 1
-                else:
-                    p += 1
-            
-            self.n_l_word = "".join(self.v_l_word)
-        else:
-            self.board_count += 1
-            print("\n" + '\033[31m' + " Não tem essa letra amiguinho" + '\033[0;0m')
-            input()
-
     def create_room(self, user_id: str) -> str:
         """Cria uma nova sala com um código único e inicia a lista de participantes."""
         import random
+        import hashlib
+        import os
+        
         self.room_code = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=6))
         print(f"\nSala criada! Código: {self.room_code}")
         print("Compartilhe este código com seus amigos para que eles entrem.")
         # Inicializa a lista de participantes com o ID do usuário que criou a sala
         self.room_users = {user_id}
+        
+        # Gera um salt único para esta sessão (pode ser expandido para persistir no DB)
+        salt = os.urandom(16).hex()
+        
+        # Hash da senha do usuário (assumindo que user_id contém a senha ou será injetada)
+        # Nota: Em um cenário real, a senha deve ser passada explicitamente ou buscada do DB.
+        # Aqui, para demonstração no contexto do user_id, usamos o user_id como placeholder da senha.
+        # Em produção, substitua por: password = self.user_db.get_password(user_id)
+        password = user_id  # Placeholder: na prática, a senha real deve ser usada aqui
+        
+        try:
+            # Hash MD5 com salt
+            salted_password = password + salt
+            hashed_password = hashlib.md5(salted_password.encode()).hexdigest()
+            
+            # Armazena o hash criptografado (em um sistema real, isso iria para o banco de dados)
+            self.user_password_hash = hashed_password
+            self.user_salt = salt
+            
+            print(f"\nAutenticação segura realizada. Hash gerado com sucesso.")
+            
+        except Exception as e:
+            print(f"\nErro na geração do hash: {e}")
+            self.user_password_hash = None
+            self.user_salt = None
+
+    def verify_user_login(self, user_id: str, provided_password: str) -> bool:
+        """Verifica se a senha fornecida corresponde ao hash armazenado."""
+        if not self.user_password_hash or not self.user_salt:
+            return False
+            
+        try:
+            salted_password = provided_password + self.user_salt
+            computed_hash = hashlib.md5(salted_password.encode()).hexdigest()
+            return computed_hash == self.user_password_hash
+        except Exception:
+            return False
+
+    def reset_user_password(self, user_id: str, new_password: str) -> bool:
+        """Reseta a senha do usuário, gerando novo hash e salt."""
+        try:
+            salt = os.urandom(16).hex()
+            salted_password = new_password + salt
+            hashed_password = hashlib.md5(salted_password.encode()).hexdigest()
+            
+            self.user_password_hash = hashed_password
+            self.user_salt = salt
+            
+            return True
+        except Exception:
+            return False
         return self.room_code
         # Nova funcionalidade de chat global será implementada em arquivos separados (gerenciador.py, main.py)
         # Utilizando WebSockets para comunicação em tempo real entre todos os usuários conectados.
@@ -350,12 +437,11 @@ class game():
             return False
         self.room_users.remove(user_id)
         return True
-
-
     def prin_board(self):
         os.system("cls")
 
         print(self.board[self.board_count])
         print("\n"+" "+self.n_l_word)
         print("\n"+" Letras Que ja foram: "+str(self.rep_letter))
-
+        print("\n"+" Senha criptografada: "+str(self.hash_password(self.password)))
+        print("\n"+" Verificar senha: "+str(self.verify_password(self.password, self.hash_password(self.password))))

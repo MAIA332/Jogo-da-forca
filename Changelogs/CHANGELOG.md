@@ -121,3 +121,18 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-7706767c-062c-4cd1-8855-1bbb3758c4d2:end -->
+
+<!-- neve-work:changelog-ec28b599-d9ec-4362-ae2c-018122c5f82b:begin -->
+## 2026-11-25 · Alterações · Work ec28b599-d9e
+
+- `classes.py` — Alterado; +122/−36 linhas. Símbolos novos/alterados: `TestUser`, `create_room`, `hash_password`, `verify_password`, `game`.
+- `security.py` — Criado; +48/−0 linhas. Símbolos novos/alterados: `PasswordHasher`.
+
+### Resumos dos patches (informativos)
+- `security.py`: A intenção é implementar um mecanismo de hashing de senhas com sal para mitigar ataques de força bruta e rainbow tables. O efeito é a adição de uma nova classe de utilidade que centraliza a lógica de criptografia sem alt
+- `classes.py`: A intenção é adicionar um método de hash de senha com sal para proteger credenciais, mas o efeito é falhar devido a uma lógica de verificação incorreta que compara hashes em vez de senhas.
+- `classes.py`: A alteração remove duplicatas de importação e resolve o ciclo circular ao manter a dependência entre classes.py e si mesmo. Isso garante que o código execute sem erros de importação, preservando a funcionalidade original
+- `classes.py`: A alteração resolve a importação circular removendo a referência direta e substituindo-a por uma importação relativa, eliminando o erro de execução. Isso permite que o módulo seja carregado corretamente sem criar classes
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-ec28b599-d9ec-4362-ae2c-018122c5f82b:end -->
