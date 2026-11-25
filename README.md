@@ -1,5 +1,15 @@
 # Jogo da Forca em Python
 
+<!-- neve-readme-current -->
+
+**Atualizado em 2026-11-25.**
+
+- `Dockerfile` — Criado; +27/−0 linhas.
+- `docker-compose.yml` — Criado; +19/−0 linhas.
+
+<!-- neve-readme-current -->
+
+
 Bem-vindo ao repositório do Jogo da Forca em Python! Este projeto é uma implementação do clássico jogo da forca, uma oportunidade para aprimorar suas habilidades de programação e entretenimento. O jogo utiliza um arquivo externo `palavras.txt` para armazenar as palavras a serem adivinhadas.
 
 ## Objetivo

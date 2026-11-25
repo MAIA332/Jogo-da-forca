@@ -12,3 +12,17 @@
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-9b208495-ad74-4942-9b58-ace4db9b427b:end -->
+
+
+<!-- neve-work:changelog-b7d50278-1460-4209-9671-cd3378863406:begin -->
+## 2026-11-25 · Alterações · Work b7d50278-146
+
+- `Dockerfile` — Criado; +27/−0 linhas.
+- `docker-compose.yml` — Criado; +19/−0 linhas.
+
+### Resumos dos patches (informativos)
+- `Dockerfile`: A alteração cria um ambiente de execução isolado e portátil para o jogo, permitindo que ele rode em qualquer máquina sem dependências locais. O efeito é a capacidade de subir o projeto rapidamente em VMs, mantendo a exec
+- `docker-compose.yml`: A alteração cria um ambiente de containerização para rodar o jogo Hangman em qualquer máquina virtual com acesso ao código-fonte. O efeito é permitir a execução interativa do aplicativo através de um terminal persistente
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-b7d50278-1460-4209-9671-cd3378863406:end -->
