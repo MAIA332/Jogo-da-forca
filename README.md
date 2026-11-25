@@ -34,7 +34,7 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 - Gerenciamento de Salas: Classe `RoomManager` gerencia a criação e gestão de salas de chat.
 - Configuração Dinâmica: Carregamento e salvamento de usuários via `load_users` e `save_users` no `config.py`.
 - Multi-threading Avançado: Padrão de isolamento por cliente logado, com thread dedicada para cada sessão, garantindo eficiência e consistência de dados.
-- Splash Screen de Boas-vindas: Ao autenticar, o sistema exibe uma tela de carregamento de 2 segundos com a mensagem personalizada "Olá {nome do usuário}" antes de iniciar o fluxo principal.
+- Splash Screen de Boas-vindas: Ao autenticar, o sistema exibe uma tela de carregamento personalizada com um mascote em ASCII (estilo "claude code") e a mensagem "Olá {nome do usuário}".
 
 **Atualização:** 2026-11-25
 ## Como Jogar

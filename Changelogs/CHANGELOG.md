@@ -107,3 +107,17 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-ae6fa984-06d3-4150-9ce4-3bb9f47d6d43:end -->
+
+
+<!-- neve-work:changelog-7706767c-062c-4cd1-8855-1bbb3758c4d2:begin -->
+## 2026-11-25 · Alterações · Work 7706767c-062
+
+- `assets/splash_ascii.py` — Criado; +20/−0 linhas. Símbolos novos/alterados: `SplashScreen`.
+- `splash.py` — Alterado; +6/−0 linhas. Símbolos novos/alterados: `SplashScreen`.
+
+### Resumos dos patches (informativos)
+- `assets/splash_ascii.py`: Foram propostas 20 linhas adicionadas e 0 removidas em 1 região(ões). Confira os trechos abaixo e o objetivo da tarefa.
+- `splash.py`: Foram propostas 6 linhas adicionadas e 0 removidas em 2 região(ões). Confira os trechos abaixo e o objetivo da tarefa.
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-7706767c-062c-4cd1-8855-1bbb3758c4d2:end -->

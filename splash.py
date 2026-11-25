@@ -6,8 +6,14 @@ class SplashScreen:
     def __init__(self, user_name: str):
         self.user_name = user_name
         self.duration = 2.0  # segundos de duração
+        self.ascii_mascote = """
+      /\\_/\\
+     ( o.o )
+      > ^ <
+    """
 
     def show(self):
+        print(self.ascii_mascote)
         print(f"Splash Screen: Olá {self.user_name}")
         time.sleep(self.duration)
         # Aqui você pode redirecionar para a tela principal ou iniciar o fluxo principal
