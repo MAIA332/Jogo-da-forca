@@ -1,3 +1,4 @@
+# Palavras do Jogo
 Bola
 casa
 massa
@@ -30,6 +31,7 @@ Escola
 Estudioso
 Tela
 pato
+# Fim das Palavras
 rato
 camelo
 lukas

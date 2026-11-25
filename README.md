@@ -13,6 +13,7 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 - Interatividade: O jogador pode interagir com o jogo através do terminal.
 - Mensagens Descritivas: O jogo fornece mensagens claras para orientar o jogador durante o jogo.
 - Simplicidade e Clareza: O código é projetado para ser fácil de entender, adequado para aprendizado.
+- Design Moderno: Interface inspirada em ferramentas de monitoramento como Cloudecode e Glances, com tema escuro e elementos interativos.
 
 ## Como Jogar
 
@@ -22,14 +23,16 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 4. Ganhe ao adivinhar a palavra ou enforque o personagem ao errar muitas vezes.
 5. Utilize o arquivo `palavras.txt` para adicionar ou modificar palavras do jogo.
 
-Este projeto é uma oportunidade perfeita para praticar a criação de jogos simples em Python, enquanto recria a diversão do jogo da forca.
+## Interface
 
-## Interface:
+A interface do jogo foi projetada para ser moderna e interativa, utilizando um tema escuro com elementos em tons de verde e laranja, inspirado em ferramentas de monitoramento de sistemas. O menu é navegável por teclado e inclui uma aba de chat estilizada para comunicação entre jogadores.
+
 ![image](https://user-images.githubusercontent.com/67965680/211147230-d26e0796-af42-4200-98f9-5afcdb74c995.png)
 
 ---
 
 <p align="center">
+
   Feito com ❤️ por Lukas Maia
 </p>
 

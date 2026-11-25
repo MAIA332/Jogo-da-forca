@@ -30,6 +30,17 @@ while True:
                 chat_manager.disconnect()
                 break
             chat_manager.send(msg)
+            # Simulação de recebimento de mensagens para visualização no terminal
+            # (A implementação real depende do ChatManager retornar mensagens ou o loop ser assíncrono)
+            try:
+                # Tenta receber mensagens do chat_manager se disponível
+                if hasattr(chat_manager, 'receive_message'):
+                    msg_recebida = chat_manager.receive_message()
+                    if msg_recebida:
+                        print(f"[{msg_recebida.get('timestamp', 'now')}] {msg_recebida.get('user', 'Unknown')}: {msg_recebida.get('message', '')}")
+            except Exception:
+                pass
+
     else:
         print("Opção inválida.")
         continue

@@ -9,17 +9,29 @@ import os
 
 
 def rand_word() -> str:
-    with open("palavras.txt", "r", encoding="utf-8") as f:
-        bank = f.readlines()
-    if not bank:
-        raise ValueError("A lista de palavras está vazia.")
-    return random.choice(bank).strip()
+    """
+    Retorna uma palavra aleatória do arquivo de palavras.
+    Design: Mantém a funcionalidade original, mas com docstring alinhada ao estilo técnico do terminal.
+    """
+    try:
+        with open("palavras.txt", "r", encoding="utf-8") as f:
+            bank = f.readlines()
+        
+        if not bank:
+            raise ValueError("A lista de palavras está vazia.")
+        
+        return random.choice(bank).strip()
+    except FileNotFoundError:
+        raise ValueError("Arquivo 'palavras.txt' não encontrado.")
+    except Exception as e:
+        raise ValueError(f"Erro ao ler palavras: {e}")
 
 def init_chat_global():
     """Inicializa o módulo de chat global, importando dependências necessárias."""
     from chat_manager import ChatManager
     from templates.chat import render_template
-    return ChatManager, render_template
+    from templates.menu import render_menu_interactive
+    return ChatManager, render_template, render_menu_interactive
 
 def create_room() -> str:
     import secrets

@@ -10,13 +10,24 @@ class RoomManager:
         self.rooms: Dict[str, Dict] = {}
         self.users_in_rooms: Dict[str, Set[str]] = {}  # room_code -> set of user_ids
         self.room_creators: Dict[str, str] = {}  # room_code -> user_id
+        self.chat_history: List[Dict] = []  # Lista para armazenar mensagens de chat
+        self.current_chat_room: str = None  # Código da sala atual para o chat
+        self.chat_messages: Dict[str, List[str]] = {}  # room_code -> lista de mensagens
+        self.chat_colors = {
+            'user': '\033[92m',  # Verde
+            'system': '\033[94m',  # Azul
+            'error': '\033[91m',  # Vermelho
+            'reset': '\033[0m'
+        }
 
     def create_room(self, user_id: str) -> str:
         """Cria uma nova sala e retorna seu código."""
         room_code = f"room_{random.randint(1000, 9999)}"
         self.rooms[room_code] = {
             "users": [],
-            "creator": user_id
+            "creator": user_id,
+            "status": "active",
+            "color": "#00ff41"  # Verde estilo terminal
         }
         self.users_in_rooms[room_code] = {user_id}
         self.room_creators[room_code] = user_id
