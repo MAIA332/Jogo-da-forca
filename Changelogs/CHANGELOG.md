@@ -136,3 +136,17 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-ec28b599-d9ec-4362-ae2c-018122c5f82b:end -->
+
+
+<!-- neve-work:changelog-0f5032dc-c1a2-523e-8f2e-e400ad539b3c:begin -->
+## 2026-11-26 · Alterações · Work 0f5032dc-c1a
+
+- `Dockerfile` — Alterado; +11/−1 linhas.
+- `room_manager.py` — Alterado; +27/−19 linhas. Símbolos novos/alterados: `RoomManager`.
+
+### Resumos dos patches (informativos)
+- `room_manager.py`: A alteração adiciona lógica para mudar o diretório de execução para o caminho padrão do Docker ou Linux, garantindo que o aplicativo rode corretamente em qualquer ambiente. Isso elimina a dependência de configurações loc
+- `Dockerfile`: A alteração adiciona o suporte ao sistema de arquivos VFS para permitir que o jogo acesse arquivos de texto em sistemas Windows e macOS além do Linux. Isso garante que a imagem Docker funcione corretamente em qualquer má
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-0f5032dc-c1a2-523e-8f2e-e400ad539b3c:end -->

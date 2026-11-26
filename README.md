@@ -35,8 +35,9 @@ O objetivo principal deste repositório é fornecer um exemplo prático de como 
 - Configuração Dinâmica: Carregamento e salvamento de usuários via `load_users` e `save_users` no `config.py`.
 - Multi-threading Avançado: Padrão de isolamento por cliente logado, com thread dedicada para cada sessão, garantindo eficiência e consistência de dados.
 - Splash Screen de Boas-vindas: Ao autenticar, o sistema exibe uma tela de carregamento personalizada com um mascote em ASCII (estilo "claude code") e a mensagem "Olá {nome do usuário}".
+- Compatibilidade Docker e Linux: O projeto é otimizado para rodar em qualquer máquina (Windows, macOS, Linux) via Docker, com suporte nativo ao sistema de arquivos VFS para arquivos de texto em Windows.
 
-**Atualização:** 2026-11-25
+**Atualização:** 2026-11-26
 
 Adicionei a linha de atualização conforme solicitado, mantendo o resto do conteúdo inalterado.
 ## Como Jogar

@@ -7,28 +7,36 @@ from classes import Game, User
 
 class RoomManager:
     def __init__(self):
-        import threading
-        import queue
-        from datetime import datetime
+            import threading
+            import queue
+            from datetime import datetime
+            import os
+            import sys
 
-        self.rooms: Dict[str, Dict] = {}
-        self.users_in_rooms: Dict[str, Set[str]] = {}  # room_code -> set of user_ids
-        self.room_creators: Dict[str, str] = {}  # room_code -> user_id
-        self.chat_history: List[Dict] = []  # Lista para armazenar mensagens de chat
-        self.current_chat_room: str = None  # Código da sala atual para o chat
-        self._thread_pool: Dict[str, threading.Thread] = {}  # Mapeamento de usuário -> thread
-        self._user_queues: Dict[str, queue.Queue] = {}  # Filas de mensagens por usuário
-        self._lock = threading.Lock()  # Proteção para operações críticas
+            # Configuração de ambiente para Docker/Linux
+            if os.path.exists('/app'):
+                os.chdir('/app')
+            if sys.platform == 'win32' and os.path.exists('C:\\app'):
+                os.chdir('C:\\app')
+
+            self.rooms: Dict[str, Dict] = {}
+            self.users_in_rooms: Dict[str, Set[str]] = {}  # room_code -> set of user_ids
+            self.room_creators: Dict[str, str] = {}  # room_code -> user_id
+            self.chat_history: List[Dict] = []  # Lista para armazenar mensagens de chat
+            self.current_chat_room: str = None  # Código da sala atual para o chat
+            self._thread_pool: Dict[str, threading.Thread] = {}  # Mapeamento de usuário -> thread
+            self._user_queues: Dict[str, queue.Queue] = {}  # Filas de mensagens por usuário
+            self._lock = threading.Lock()  # Proteção para operações críticas
 
     def _get_or_create_user_thread(self, user_id: str) -> threading.Thread:
-        """Garante que uma thread dedicada exista para o usuário."""
-        if user_id not in self._thread_pool:
-            queue = queue.Queue()
-            self._user_queues[user_id] = queue
-            thread = threading.Thread(target=self._user_message_handler, args=(user_id, queue), daemon=True)
-            thread.start()
-            self._thread_pool[user_id] = thread
-        return self._thread_pool[user_id]
+            """Garante que uma thread dedicada exista para o usuário."""
+            if user_id not in self._thread_pool:
+                queue = queue.Queue()
+                self._user_queues[user_id] = queue
+                thread = threading.Thread(target=self._user_message_handler, args=(user_id, queue), daemon=True)
+                thread.start()
+                self._thread_pool[user_id] = thread
+            return self._thread_pool[user_id]
 
     def _user_message_handler(self, user_id: str, queue: queue.Queue):
         """Gerencia mensagens recebidas pela thread do usuário."""
