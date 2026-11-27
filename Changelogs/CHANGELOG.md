@@ -150,3 +150,17 @@ Validação de execução registrada separadamente pelo Work.
 
 Validação de execução registrada separadamente pelo Work.
 <!-- neve-work:changelog-0f5032dc-c1a2-523e-8f2e-e400ad539b3c:end -->
+
+
+<!-- neve-work:changelog-f8f85016-12ae-50f4-adbc-bc9498616a13:begin -->
+## 2026-11-27 · Alterações · Work f8f85016-12a
+
+- `Dockerfile` — Alterado; +3/−22 linhas.
+- `docker-compose.yml` — Alterado; +4/−0 linhas.
+
+### Resumos dos patches (informativos)
+- `Dockerfile`: A alteração simplifica a instalação de dependências e remove comandos desnecessários para garantir que o container rode corretamente em qualquer ambiente. Isso torna o projeto muito mais fácil de implementar ao eliminar 
+- `docker-compose.yml`: A alteração adiciona suporte a terminais interativos e entrada padrão, facilitando a execução local do CLI dentro de containers. Isso permite que o usuário teste o aplicativo diretamente no terminal sem precisar configur
+
+Validação de execução registrada separadamente pelo Work.
+<!-- neve-work:changelog-f8f85016-12ae-50f4-adbc-bc9498616a13:end -->
